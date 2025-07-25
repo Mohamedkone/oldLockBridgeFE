@@ -21,7 +21,7 @@ const Live = () => {
   const [modal, setModal] = useState(false);
   const [info, setInfo] = useState(null);
   const [live, setLive] = useState([]);
-  const { api, dropLink } = useContext(AuthContext);
+  const { api, dropLink, myInfo } = useContext(AuthContext);
 
   const handleClose = () => {
     setModal(false);
@@ -38,13 +38,14 @@ const Live = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      await axios.get(`${api}/livebridges`).then((res) => {
+      await axios.get(`${api}/livebridges/all/${myInfo.id}`).then((res) => {
         setLive(res.data);
       });
     };
+  if(myInfo?.id)
     fetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [myInfo]);
   const remove = async (id) => {
     await axios.delete(`${api}/livebridges/${id}`).then(() => {
       window.location.reload();

@@ -1,12 +1,8 @@
 import admin from "./admin";
 import users from "./users";
-import guest from "./guest";
-import log from "./log";
-
-// ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-	items: [admin, log, users , guest]
+	items: [admin, users]
 };
 
 export default menuItems;

@@ -400,9 +400,9 @@ console.log(existingStorage)
                 <Card
                     onClick={platform.available?() => handleSelectPlatform(key):null}
                     sx={{
-                    background: platform.bkc,
+                    background: !platform.available ? "#999" : platform.bkc,
                     border: "1px solid #ccc",
-                    cursor: "pointer",
+                    cursor:  `${!platform.available ? "not-allowed" : "pointer"}`,
                     textAlign: "center",
                     p: 2,
                     }}

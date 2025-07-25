@@ -102,7 +102,7 @@ export default function Dashboard() {
             width={"min(90dvw, 400px)"} 
             maxHeight={"250px"}
             minHeight={"200px"}
-            title={"Active Bridges"}
+            title={"Active Live Bridges"}
             link={'/bridge?panel=Live'}
           >
             <Box py={2}>

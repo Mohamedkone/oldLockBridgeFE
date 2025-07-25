@@ -126,7 +126,7 @@ const Integration = () => {
   }
 
   const openPop = (e) =>{
-    setChosenOne(e.script.myScript)
+    setChosenOne(e?.script?.myScript)
     setPopTitle(e.host)
     setModal(true)
   }
@@ -208,7 +208,7 @@ const Integration = () => {
       title={popTitle}
       content={<Typography>Are you sure you want to delete this integration?</Typography>}
       contentType='text'
-      key={1}
+      key={2}
       btn1={"Close"}
       btn2={"Delete"}
       btn1Func={handleDelClose}

@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 // material-ui
 import { styled, useTheme } from "@mui/material/styles";
-import { Box, CssBaseline, Divider, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, CssBaseline, Divider, Typography, useMediaQuery } from "@mui/material";
 
 // project imports
 // import Breadcrumbs from "ui-component/extended/Breadcrumbs";
@@ -165,11 +165,14 @@ const MainLayout = () => {
 	// if(location.search.includes("?code"))
 	// return<></>
 
+	const accessRoom = () => {
+		window.location.href= "http://localhost:3002"
+	}
+
 	return (
 		<Box sx={{ display: "flex", overflow:"none", flexDirection:{xs:"column", md:"row"}, justifyContent:{xs:"space-between" ,md:"unset"}, height:"100dvh"}} position={"relative"}>
 			<CssBaseline />
 			{/* header */}
-
 
 			{/* drawer */}
 			<Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened}  />
@@ -181,6 +184,7 @@ const MainLayout = () => {
 				<Box display={'flex'}  mb={{xs:"40px", md: "none"}} justifyContent={'space-between'}>
 					<Typography variant="h1">{pageTitle}</Typography>
 					<Box display={'flex'} gap={"16px"}>
+						<Button onClick={accessRoom} variant="outlined">Access Lock<span style={{color:"#0faf42", fontWeight:"bold"}}>Room</span></Button>
 						<Divider orientation="vertical" flexItem sx={{borderWidth:"1px"}}/>
 						<ProfileSection userData={{ uName: `${myInfo?.fname} ${myInfo?.lname}`, uRole: myInfo?.role, uAvatar: myInfo?.avatar }} />
 					</Box>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Box, ToggleButton, Typography, ToggleButtonGroup } from "@mui/material";
 import Live from "./Live";
 import Integration from "./Integration";
@@ -13,6 +13,21 @@ const TabsPanel = ({setGenerateBtn}) => {
     setGenerateBtn(searchParams.get('panel')||"Live")
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
+
+  useLayoutEffect(()=>{
+    const views =  ["Live", "Integration"]
+    let param
+    if(views.includes(searchParams.get('panel'))){
+      param = searchParams.get('panel')
+    }else{
+      param = "Live"
+    }
+    setSearchParams(`panel=${param}`)
+  },[])
+
+  useEffect(()=>{
+    setDisplayMode(searchParams.get('panel') || "Live")
+  },[searchParams])
 
   const handleDisplayMode = (event, nextValue) => {
     if (nextValue !== null){
@@ -39,9 +54,9 @@ const TabsPanel = ({setGenerateBtn}) => {
         <ToggleButton value={"Live"} aria-label="list-mode">
           <Typography fontWeight={'bold'}>Live</Typography>
         </ToggleButton>
-        <ToggleButton value={"Direct"} aria-label="card-mode">
+        {/* <ToggleButton value={"Direct"} aria-label="card-mode">
           <Typography fontWeight={'bold'}>Direct</Typography>
-        </ToggleButton>
+        </ToggleButton> */}
         <ToggleButton value={"Integration"} aria-label="card-mode">
           <Typography fontWeight={'bold'}>Integration</Typography>
         </ToggleButton>
@@ -50,9 +65,9 @@ const TabsPanel = ({setGenerateBtn}) => {
         {
         displayMode === "Live" ? 
         <Live /> 
-        :
-        displayMode === "Direct" ? 
-        <Direct /> 
+        // :
+        // displayMode === "Direct" ? 
+        // <Direct /> 
         :
         displayMode === "Integration" ? 
         <Integration />

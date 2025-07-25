@@ -27,7 +27,6 @@ const users = {
 			url:"/vault",
 			breadcrumbs: false
 		},
-
 	]
 };
 

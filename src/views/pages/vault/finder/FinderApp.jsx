@@ -130,11 +130,13 @@ const FinderApp = () => {
         parentId: currentParentId,
       };
 
-      await axios.post(`${api}/vdata`, newFolder);
-      setFileSystemState(prev => ({ ...prev, [newFolder.id]: newFolder }));
-      setIsCreatingFolder(false);
-      setNewFolderName("");
-      setNewNameError(false);
+      await axios.post(`${api}/vdata`, newFolder).then(res=>{
+        console.log(res)
+        setFileSystemState(prev => ({ ...prev, [res.data.id]: res.data }));
+        setIsCreatingFolder(false);
+        setNewFolderName("");
+        setNewNameError(false);
+      });
     } catch (error) {
       console.error("Folder creation failed:", error);
     }

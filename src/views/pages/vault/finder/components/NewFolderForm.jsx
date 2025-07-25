@@ -18,7 +18,7 @@ const NewFolderForm = ({
   >
     <TextField
       autoFocus
-      maxWidth="280px"
+      // maxWidth="280px"
       value={newFolderName}
       onChange={handleFolderNameChange}
       onKeyDown={(e) => e.key === "Enter" && handleCreateFolder()}

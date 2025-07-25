@@ -1,5 +1,5 @@
 // assets
-import { IconDashboard, IconTransfer } from "@tabler/icons-react";
+import { IconDashboard, IconTransfer, IconUserHexagon } from "@tabler/icons-react";
 
 // constant
 
@@ -11,6 +11,14 @@ const admin = {
 	title: "Admin",
 	type: "group",
 	children: [
+		{
+			id: "admin",
+			title: "Admin",
+			type: "item",
+			url: "/admin",
+			icon: IconUserHexagon,
+			breadcrumbs: false
+		},
 		{
 			id: "default",
 			title: "Dash",

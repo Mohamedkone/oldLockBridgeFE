@@ -19,7 +19,9 @@ const MoveModal = ({ open, onClose, fileSystem, currentItem, onMove }) => {
   const isSameLocation = currentItem?.parentId === currentParentId;
 
   const getFoldersByParentId = (parentId) => {
-    return Object.values(fileSystem).filter(
+    // Handle both array and object formats
+    const items = Array.isArray(fileSystem) ? fileSystem : Object.values(fileSystem);
+    return items.filter(
       (item) => item.parentId === parentId && item.type === "folder"
     );
   };
@@ -158,7 +160,7 @@ const MoveModal = ({ open, onClose, fileSystem, currentItem, onMove }) => {
 MoveModal.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  fileSystem: PropTypes.object.isRequired,
+  fileSystem: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   currentItem: PropTypes.object,
   onMove: PropTypes.func.isRequired,
 };

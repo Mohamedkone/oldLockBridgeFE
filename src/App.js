@@ -13,7 +13,7 @@ import ErrorRoute from "./routes/ErrorRoute";
 import AuthLogin from "./views/pages/authentication/authentication/Login";
 import CallbackPage from "./views/pages/authentication/CallbackPage";
 import AccountSetting from "./views/pages/account/AccountSetting";
-import Vault from "./views/pages/room/vault/Vault";
+import Vault from "./views/pages/vault/finder/Vault";
 import Logs from "./views/dashboard/transfers/Logs";
 import { jwtDecode } from "jwt-decode";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -21,9 +21,10 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./context/AuthContext";
 import MaintenancePage from "MaintenancePage";
 import Bridge from "views/pages/bridge";
-import Dashboard from "./views/dashboard/Default";
+import Dashboard from "./views/dashboard/Dash";
 import Callbackss from "views/pages/authentication/Callbackss";
 import CallbacksDrop from "views/pages/authentication/CallbacksDrop";
+import Admin from "views/dashboard/Admin";
 
 const UnauthenticatedRoutes = () => (
   <Routes>
@@ -37,10 +38,11 @@ const UnauthenticatedRoutes = () => (
 );
 
 
-const AdminRoutes = () => (
+const AuthenticatedRoutes = () => (
   <Routes>
     <Route path="/" element={<MainLayout />}>
       <Route index element={<Dashboard />} />
+      <Route path="admin" element={<Admin />} />
       <Route path="transfers" element={<Logs />} />
       <Route path="account" element={<AccountSetting />} />
       <Route path="vault" element={<Vault />} />
@@ -69,7 +71,7 @@ const App = () => {
   useEffect(() => {
     if (myInfo) {
       setRole(myInfo.role);
-
+      console.log(myInfo)
     }
   }, [myInfo]);
 
@@ -106,7 +108,7 @@ const App = () => {
         <CssBaseline />
         <NavigationScroll>
           {isAuthenticated ? 
-            <AdminRoutes />
+            <AuthenticatedRoutes />
             :
             <UnauthenticatedRoutes />
           }

@@ -21,6 +21,7 @@ function LiveBridge({ close }) {
     const [storage, setStorage] = useState(""); // Default to empty string
     const [storageList, setStorageList] = useState([]);
     const [exp, setExp] = useState(""); // Default to empty string
+    const [pass, setPass] = useState(""); // Default to empty string
     const [access, setAccess] = useState(""); // Default to empty string
     const [security, setSecurity] = useState(""); // Default to empty string
     const [storageType, setStorageType] = useState(""); // Default to empty string
@@ -53,10 +54,14 @@ function LiveBridge({ close }) {
             status: true,
             ownerId: myInfo.id, 
             exp,
+            pass: security===2?pass:null,
             access,
             security,
             storageType: storageTypeMap[storageType.toLowerCase()] || "s3", 
-        }).then(() => close());
+        }).then(() => {
+            close()
+            window.location.reload()
+        });
  
     };
 
@@ -144,6 +149,18 @@ function LiveBridge({ close }) {
                         <br />*Diamond: Encrypt your data before it leaves the sender's device using client keys (End-to-End encryption)
                 </FormHelperText>
             </FormControl>
+            {security===2 && <FormControl fullWidth>
+                <TextField
+                    label="passphrase"
+                    value={pass}
+                    onChange={(e) => setPass(e.target.value)}
+                    type="password"
+                />
+                <FormHelperText>
+                        This will be used to encyrpt your files, the loner the better,
+                        <br />8 characters minimum recommended
+                </FormHelperText>
+            </FormControl>}
             <ButtonGroup fullWidth sx={{ gap: "20px" }}>
                 <Button
                     color="error"

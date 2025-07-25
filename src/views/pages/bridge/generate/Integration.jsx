@@ -18,14 +18,14 @@ function Integration({close}) {
     const { api, myInfo } = useContext(AuthContext)
     const [ myScript, setMyScript ] = useState({})
     const theme = useTheme()
-    useEffect(()=>{
-        const res = async()=>
-            await axios.get(`${api}/integrations`).then((res)=>
-                console.log(`${res.data[0].script.myScript}`)
-            )
-        res()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
+    // useEffect(()=>{
+    //     const res = async()=>
+    //         await axios.get(`${api}/integrations`).then((res)=>
+    //             console.log(`${res}`)
+    //         )
+    //     res()
+    // // eslint-disable-next-line react-hooks/exhaustive-deps
+    // },[])
 
     const genIntergration = () =>{
         const myDate = new Date()
@@ -38,6 +38,8 @@ function Integration({close}) {
             script:{myScript},
             addedDate: date,
             ownerId: myInfo.id,
+        }).then(()=>{
+            window.location.reload()
         })
     }
 

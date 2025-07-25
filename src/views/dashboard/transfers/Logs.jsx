@@ -71,10 +71,10 @@ const [displayMode, setDisplayMode] = useState("peer")
         exclusive
       >
         <ToggleButton value={"peer"} aria-label="list-mode">
-          <Typography fontWeight={'bold'}>Bridge logs</Typography>
+          <Typography fontWeight={'bold'}>Live Bridge</Typography>
         </ToggleButton>
         <ToggleButton value={"vault"} aria-label="card-mode">
-          <Typography fontWeight={'bold'}>Vault logs</Typography>
+          <Typography fontWeight={'bold'}>Integration</Typography>
         </ToggleButton>
 
       </ToggleButtonGroup>

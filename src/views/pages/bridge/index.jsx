@@ -5,7 +5,7 @@ import TabsPanel from "./TabsPanel";
 import { AuthContext } from 'context/AuthContext';
 import Integration from './generate/Integration';
 import LiveBridge from './generate/LiveBridge';
-import DirectBridge from './generate/DirectBridge';
+// import DirectBridge from './generate/DirectBridge';
 import ModalBridge from 'ui-component/modals/ModalBridge';
 
 function Bridge() {
@@ -67,7 +67,7 @@ function Bridge() {
                 key={1}
                 btn1Func={handleClose}
             />}
-            {generateBtn === 'Direct'  &&<ModalBridge
+            {/* {generateBtn === 'Direct'  &&<ModalBridge
                 open={modal}
                 title={"Generate a bridge"}
                 content={<DirectBridge close={handleClose} />}
@@ -77,7 +77,7 @@ function Bridge() {
                 btn2={"Generate"}
                 btn1Func={handleClose}
                 btn2Func={handleSave}
-            />}
+            />} */}
         </Container>
     )
 }

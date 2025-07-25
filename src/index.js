@@ -16,7 +16,6 @@ import { store } from "store";
 import "assets/scss/style.scss";
 import { Auth0ProviderWithNavigate } from "auth0-provider-with-navigate";
 import { AuthProvider } from "context/AuthContext";
-import { SocketProvider } from 'context/socket/socketContext';
 import { WSProvider } from 'context/socket/wsContext';
 
 
