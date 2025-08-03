@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Decryptor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+
+        .drop-zone {
+            border: 3px dashed #ccc;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            margin-bottom: 20px;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #764ba2;
+            background: #f4f0ff;
+        }
+
+        .drop-zone.has-file {
+            border-color: #4CAF50;
+            background: #f0fff0;
+        }
+
+        .drop-zone p {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone small {
+            color: #999;
+        }
+
+        .file-info {
+            background: #e8f5e8;
+            border: 1px solid #4CAF50;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .file-info h4 {
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+
+        .file-info p {
+            color: #4a5568;
+            margin: 5px 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #764ba2, #667eea);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.3);
+        }
+
+        .btn-secondary {
+            background: #28a745;
+            color: white;
+            display: none;
+        }
+
+        .btn-secondary:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .processing {
+            animation: pulse 1.5s infinite;
+        }
+
+        .security-info {
+            background: #fff3e0;
+            border: 1px solid #ff9800;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .security-info h4 {
+            color: #e65100;
+            margin-bottom: 8px;
+        }
+
+        .security-info ul {
+            color: #424242;
+            margin-left: 20px;
+        }
+
+        .key-input {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔓 File Decryptor</h1>
+            <p>Decrypt your secure files safely</p>
+        </div>
+
+        <div class="security-info">
+            <h4>🔒 Decryption Requirements:</h4>
+            <ul>
+                <li>Original password used for encryption</li>
+                <li>Encrypted file (.enc extension)</li>
+                <li>Files are decrypted locally in your browser</li>
+                <li>No data is sent to any servers</li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="decryptPassword">Password:</label>
+            <input type="password" id="decryptPassword" placeholder="Enter the password used for encryption">
+        </div>
+
+        <div id="decryptDropZone" class="drop-zone">
+            <p>📁 Drag & drop encrypted file here</p>
+            <small>or click to select encrypted file (.enc)</small>
+            <input type="file" id="decryptFileInput" style="display: none;" accept=".enc">
+        </div>
+
+        <div id="decryptFileInfo" class="file-info">
+            <h4>Selected File:</h4>
+            <p id="decryptFileName"></p>
+            <p id="decryptFileSize"></p>
+        </div>
+
+        <div id="decryptStatus" class="status"></div>
+
+        <button class="btn btn-primary" id="decryptBtn" onclick="decryptFile()" disabled>🔓 Decrypt File</button>
+        <button class="btn btn-secondary" id="downloadDecryptedBtn" onclick="downloadDecrypted()">📥 Download Decrypted File</button>
+    </div>
+
+    <script>
+        let decryptedData = null;
+        let originalFileName = '';
+
+        // Utility functions
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('decryptStatus');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
+        }
+
+        function hideStatus() {
+            document.getElementById('decryptStatus').style.display = 'none';
+        }
+
+        // File handling
+        function setupDropZone() {
+            const dropZone = document.getElementById('decryptDropZone');
+            const fileInput = document.getElementById('decryptFileInput');
+
+            dropZone.addEventListener('click', () => fileInput.click());
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFile(files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+        }
+
+        function handleFile(file) {
+            document.getElementById('decryptFileName').textContent = file.name;
+            document.getElementById('decryptFileSize').textContent = `Size: ${(file.size / 1024).toFixed(2)} KB`;
+            document.getElementById('decryptFileInfo').style.display = 'block';
+            document.getElementById('decryptDropZone').classList.add('has-file');
+            
+            // Check if we can enable the decrypt button
+            updateDecryptButtonState();
+        }
+
+        function updateDecryptButtonState() {
+            const password = document.getElementById('decryptPassword').value;
+            const hasFile = document.getElementById('decryptFileInput').files.length > 0;
+            document.getElementById('decryptBtn').disabled = !password || !hasFile;
+        }
+
+        // File decryption
+        async function decryptFile() {
+            const fileInput = document.getElementById('decryptFileInput');
+            const file = fileInput.files[0];
+            const password = document.getElementById('decryptPassword').value;
+            
+            if (!file || !password) {
+                showStatus('Please select a file and enter the password', 'error');
+                return;
+            }
+
+            try {
+                showStatus('Decrypting file...', 'success');
+                document.getElementById('decryptBtn').classList.add('processing');
+
+                const encryptedData = await file.arrayBuffer();
+                const dataArray = new Uint8Array(encryptedData);
+
+                // Extract filename length and filename
+                const filenameLengthBytes = dataArray.slice(0, 4);
+                const filenameLength = new Uint32Array(filenameLengthBytes.buffer)[0];
+                const filenameBytes = dataArray.slice(4, 4 + filenameLength);
+                originalFileName = new TextDecoder().decode(filenameBytes);
+
+                // Extract salt, iv, and encrypted content
+                let offset = 4 + filenameLength;
+                const salt = dataArray.slice(offset, offset + 16);
+                offset += 16;
+                const iv = dataArray.slice(offset, offset + 12);
+                offset += 12;
+                const encrypted = dataArray.slice(offset);
+
+                // Derive key from password and salt
+                const encoder = new TextEncoder();
+                const keyMaterial = await window.crypto.subtle.importKey(
+                    'raw',
+                    encoder.encode(password),
+                    'PBKDF2',
+                    false,
+                    ['deriveBits', 'deriveKey']
+                );
+
+                const derivedKey = await window.crypto.subtle.deriveKey(
+                    {
+                        name: 'PBKDF2',
+                        salt: salt,
+                        iterations: 100000,
+                        hash: 'SHA-256',
+                    },
+                    keyMaterial,
+                    { name: 'AES-GCM', length: 256 },
+                    false,
+                    ['encrypt', 'decrypt']
+                );
+
+                // Decrypt
+                const decrypted = await window.crypto.subtle.decrypt(
+                    { name: 'AES-GCM', iv: iv },
+                    derivedKey,
+                    encrypted
+                );
+
+                decryptedData = new Uint8Array(decrypted);
+                
+                document.getElementById('decryptBtn').classList.remove('processing');
+                document.getElementById('downloadDecryptedBtn').style.display = 'block';
+                showStatus(`File decrypted successfully! Original filename: ${originalFileName} 🎉`, 'success');
+            } catch (error) {
+                document.getElementById('decryptBtn').classList.remove('processing');
+                if (error.name === 'OperationError' || error.message.includes('decrypt')) {
+                    showStatus('Decryption failed. Please check your password and ensure the file is a valid encrypted file.', 'error');
+                } else {
+                    showStatus('Error decrypting file: ' + error.message, 'error');
+                }
+            }
+        }
+
+        function downloadDecrypted() {
+            if (!decryptedData) return;
+
+            const blob = new Blob([decryptedData]);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = originalFileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Enable decrypt button when password is entered or file is selected
+        document.getElementById('decryptPassword').addEventListener('input', updateDecryptButtonState);
+
+        // Initialize
+        setupDropZone();
+    </script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 // assets
-import { IconAccessPoint, IconArrowsJoin } from "@tabler/icons-react";
+import { IconAccessPoint, IconArrowsJoin, IconLockOpen, IconRotate } from "@tabler/icons-react";
 
 // constant
 
@@ -19,12 +19,28 @@ const users = {
 			url:"/bridge",
 			breadcrumbs: false
 		},
+		// {
+		// 	id:"vault",
+		// 	title:"Vault",
+		// 	type:"item",
+		// 	icon: IconArrowsJoin,
+		// 	url:"/vault",
+		// 	breadcrumbs: false
+		// },
 		{
-			id:"vault",
-			title:"vault",
+			id:"generate",
+			title:"Generate",
 			type:"item",
-			icon: IconArrowsJoin,
-			url:"/vault",
+			icon: IconRotate,
+			url:"/generate",
+			breadcrumbs: false
+		},
+		{
+			id:"decrypt",
+			title:"Decrypt",
+			type:"item",
+			icon: IconLockOpen,
+			url:"/decrypt",
 			breadcrumbs: false
 		},
 	]

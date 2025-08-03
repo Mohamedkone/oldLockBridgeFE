@@ -25,6 +25,9 @@ import Dashboard from "./views/dashboard/Dash";
 import Callbackss from "views/pages/authentication/Callbackss";
 import CallbacksDrop from "views/pages/authentication/CallbacksDrop";
 import Admin from "views/dashboard/Admin";
+import PasswordGenerator from "views/pages/generator/Generator";
+import KeyGenerator from "views/pages/generator/Key";
+import Decrypt from "views/pages/decryptor/Decrypt";
 
 const UnauthenticatedRoutes = () => (
   <Routes>
@@ -50,6 +53,9 @@ const AuthenticatedRoutes = () => (
       <Route index element={<Bridge />} />
       <Route path="generate" element={<Bridge />} />
       </Route>
+      <Route path="key" element={<KeyGenerator />} />
+      <Route path="generate" element={<PasswordGenerator />} />
+      <Route path="decrypt" element={<Decrypt />} />
       <Route path="callback" element={<CallbackPage />} />
       <Route path="callbackss" element={<Callbackss />} />
       <Route path="callbacksdrop" element={<CallbacksDrop />} />

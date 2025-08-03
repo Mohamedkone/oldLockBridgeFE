@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encryption Key Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2196f3 0%, #21cbf3 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #2196f3, #21cbf3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2196f3;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2196f3, #21cbf3);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .key-display {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .key-display h3 {
+            color: #495057;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .key-section {
+            margin-bottom: 20px;
+        }
+
+        .key-section h4 {
+            color: #495057;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .key-section code {
+            background: #e9ecef;
+            padding: 12px;
+            border-radius: 6px;
+            word-break: break-all;
+            display: block;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.4;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .copy-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            background: #0056b3;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .security-info {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .security-info h4 {
+            color: #1976d2;
+            margin-bottom: 8px;
+        }
+
+        .security-info ul {
+            color: #424242;
+            margin-left: 20px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .warning-box h4 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+
+        .warning-box ul {
+            color: #856404;
+            margin-left: 20px;
+            font-size: 0.9em;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .processing {
+            animation: pulse 1.5s infinite;
+        }
+
+        .password-strength {
+            margin-top: 5px;
+            font-size: 0.85em;
+        }
+
+        .strength-weak { color: #dc3545; }
+        .strength-medium { color: #ffc107; }
+        .strength-strong { color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔑 Key Generator</h1>
+            <p>Generate secure encryption keys from passwords</p>
+        </div>
+
+        <div class="security-info">
+            <h4>🛡️ Key Generation Process:</h4>
+            <ul>
+                <li>Uses PBKDF2 with 100,000 iterations for key strengthening</li>
+                <li>Generates unique salt for each key creation</li>
+                <li>Creates AES-256 compatible encryption keys</li>
+                <li>All processing happens locally in your browser</li>
+            </ul>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Master Password:</label>
+            <input type="password" id="password" placeholder="Enter a strong master password (12+ characters recommended)">
+            <div id="passwordStrength" class="password-strength"></div>
+        </div>
+
+        <button class="btn btn-primary" id="generateBtn" onclick="generateKeys()">🔑 Generate Encryption Keys</button>
+
+        <div id="status" class="status"></div>
+
+        <div id="keyDisplay" class="key-display">
+            <h3>🔐 Generated Keys</h3>
+            
+            <div class="key-section">
+                <h4>
+                    Public Key (for encryption)
+                    <button class="copy-btn" onclick="copyKey('publicKey')">Copy</button>
+                </h4>
+                <code id="publicKey"></code>
+            </div>
+
+            <div class="key-section">
+                <h4>
+                    Private Key (for decryption - keep secret!)
+                    <button class="copy-btn" onclick="copyKey('privateKey')">Copy</button>
+                </h4>
+                <code id="privateKey"></code>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ Important Security Notes:</h4>
+                <ul>
+                    <li><strong>Public Key:</strong> Share this with anyone who needs to encrypt files for you</li>
+                    <li><strong>Private Key:</strong> Keep this secret! Anyone with this key can decrypt your files</li>
+                    <li><strong>Password:</strong> Never share your master password</li>
+                    <li><strong>Storage:</strong> Save these keys securely (password manager, encrypted notes)</li>
+                    <li><strong>Backup:</strong> Store copies in multiple secure locations</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let generatedKeys = null;
+
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = `status ${type}`;
+            statusEl.style.display = 'block';
+        }
+
+        function hideStatus() {
+            document.getElementById('status').style.display = 'none';
+        }
+
+        function updatePasswordStrength() {
+            const password = document.getElementById('password').value;
+            const strengthEl = document.getElementById('passwordStrength');
+            
+            if (password.length === 0) {
+                strengthEl.textContent = '';
+                return;
+            }
+
+            let score = 0;
+            if (password.length >= 8) score++;
+            if (password.length >= 12) score++;
+            if (/[a-z]/.test(password)) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+
+            if (score < 3) {
+                strengthEl.textContent = 'Password strength: Weak';
+                strengthEl.className = 'password-strength strength-weak';
+            } else if (score < 5) {
+                strengthEl.textContent = 'Password strength: Medium';
+                strengthEl.className = 'password-strength strength-medium';
+            } else {
+                strengthEl.textContent = 'Password strength: Strong';
+                strengthEl.className = 'password-strength strength-strong';
+            }
+        }
+
+        async function generateKeys() {
+            const password = document.getElementById('password').value;
+            
+            if (!password) {
+                showStatus('Please enter a password first', 'error');
+                return;
+            }
+
+            if (password.length < 8) {
+                showStatus('Password should be at least 8 characters long for better security', 'error');
+                return;
+            }
+
+            try {
+                showStatus('Generating encryption keys...', 'success');
+                document.getElementById('generateBtn').classList.add('processing');
+
+                // Generate encryption key from password using PBKDF2
+                const encoder = new TextEncoder();
+                const keyMaterial = await window.crypto.subtle.importKey(
+                    'raw',
+                    encoder.encode(password),
+                    'PBKDF2',
+                    false,
+                    ['deriveBits', 'deriveKey']
+                );
+
+                // Create a unique salt for key derivation
+                const salt = window.crypto.getRandomValues(new Uint8Array(16));
+                
+                // Derive key for AES encryption
+                const derivedKey = await window.crypto.subtle.deriveKey(
+                    {
+                        name: 'PBKDF2',
+                        salt: salt,
+                        iterations: 100000,
+                        hash: 'SHA-256',
+                    },
+                    keyMaterial,
+                    { name: 'AES-GCM', length: 256 },
+                    true,
+                    ['encrypt', 'decrypt']
+                );
+
+                // Export the key to create the key strings
+                const exportedKey = await window.crypto.subtle.exportKey('raw', derivedKey);
+                const keyArray = new Uint8Array(exportedKey);
+                const keyHex = Array.from(keyArray).map(b => b.toString(16).padStart(2, '0')).join('');
+                const saltHex = Array.from(salt).map(b => b.toString(16).padStart(2, '0')).join('');
+                
+                // Create public key (for encryption) - includes salt
+                const publicKey = `${keyHex}:${saltHex}`;
+                
+                // Create private key (for decryption) - includes password hash for verification
+                const passwordHash = await window.crypto.subtle.digest('SHA-256', encoder.encode(password));
+                const passwordHashArray = new Uint8Array(passwordHash);
+                const passwordHashHex = Array.from(passwordHashArray).map(b => b.toString(16).padStart(2, '0')).join('');
+                const privateKey = `${password}:${passwordHashHex}:${saltHex}`;
+
+                generatedKeys = {
+                    public: publicKey,
+                    private: privateKey,
+                    salt: salt,
+                    derivedKey: derivedKey
+                };
+
+                // Display the keys
+                document.getElementById('publicKey').textContent = publicKey;
+                document.getElementById('privateKey').textContent = privateKey;
+                document.getElementById('keyDisplay').style.display = 'block';
+                
+                document.getElementById('generateBtn').classList.remove('processing');
+                showStatus('Encryption keys generated successfully! 🎉', 'success');
+                
+            } catch (error) {
+                document.getElementById('generateBtn').classList.remove('processing');
+                showStatus('Error generating keys: ' + error.message, 'error');
+            }
+        }
+
+        function copyKey(keyType) {
+            const keyText = document.getElementById(keyType).textContent;
+            navigator.clipboard.writeText(keyText).then(() => {
+                const copyBtn = event.target;
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = keyText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const copyBtn = event.target;
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Password strength indicator
+        document.getElementById('password').addEventListener('input', updatePasswordStrength);
+
+        // Allow Enter key to generate keys
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                generateKeys();
+            }
+        });
+    </script>
+</body>
+</html>

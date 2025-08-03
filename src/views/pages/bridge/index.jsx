@@ -9,10 +9,10 @@ import LiveBridge from './generate/LiveBridge';
 import ModalBridge from 'ui-component/modals/ModalBridge';
 
 function Bridge() {
-    const {setPageTitle} = useContext(AuthContext)
     const [modal, setModal] = useState(false)
     const [ generateBtn, setGenerateBtn ] =  useState(1)
     const [ bText, setBText ] = useState("")
+    const {setPageTitle} = useContext(AuthContext)
     useEffect(()=>{
         setPageTitle(()=>"Bridges")
         return()=>setPageTitle("...")
